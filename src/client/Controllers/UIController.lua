@@ -6,7 +6,8 @@ local UIComponentFolder = ClientModules.UIComponents
 
 local UIComponents = {
     StaminaBar = require(UIComponentFolder.StaminaBar),
-    Cursor = require(UIComponentFolder.Cursor)
+    Cursor = require(UIComponentFolder.Cursor),
+    ProximityPrompt = require(UIComponentFolder.ProximityPrompt)
 }
 
 local Knit = require(ReplicatedStorage.Knit)
@@ -45,7 +46,8 @@ function UIController:KnitStart()
             ResetOnSpawn = false
         }, {
             StaminaBar = Roact.createElement(UIComponents.StaminaBar),
-            Cursor = Roact.createElement(UIComponents.Cursor)
+            Cursor = Roact.createElement(UIComponents.Cursor),
+            ProximityPrompt = Roact.createElement(UIComponents.ProximityPrompt)
         })
     end
     
@@ -57,6 +59,7 @@ function UIController:KnitStart()
         })
     end
     
+    wait(2)
     Roact.mount(Roact.createElement(mainApp), PlayerGui)
     Mouse.Icon = "rbxassetid://5604850266" -- fully transparent mouse icon
 end

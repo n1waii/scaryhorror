@@ -20,7 +20,8 @@ function Cursor:render()
     return e("Frame", {
         [Roact.Ref] = self.CursorFrameRef,
         AnchorPoint = Vector2.new(0.5, 0.5),
-        BackgroundTransparency = 1,
+        BackgroundColor3 = Color3.new(1, 1, 1),
+        BackgroundTransparency = self.props.Active and 0 or 1,
         BorderSizePixel = 0,
         Position = UDim2.fromScale(0.5, 0.5),
         Size = UDim2.fromScale(0.007, 0.02)
@@ -49,5 +50,13 @@ function Cursor:didMount()
         cursorFrame.Position = UDim2.fromOffset(Mouse.X, Mouse.Y)
     end)
 end
+
+Cursor = RoactRodux.connect(
+    function(state, props)
+        return {
+            Active = state.Cursor.Active
+        }
+    end
+)(Cursor)
 
 return Cursor

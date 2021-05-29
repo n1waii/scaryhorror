@@ -19,7 +19,7 @@ function InputController:Unmap(keyCode)
 end
 
 function InputController:InvokeMapped(keyCode)
-    if self.MappedKeys[keyCode] then 
+    if self.MappedKeys[keyCode] then
         self.MappedKeys[keyCode]()
     end
 end
@@ -59,8 +59,8 @@ function InputController:WhenKeyUp(keyCode, callback)
 end
 
 function InputController:EmitKeyUp(keyCode)
-    if not self.KeyUpListeners[keyCode] then return end
     self.KeysDown[keyCode] = nil
+    if not self.KeyUpListeners[keyCode] then return end
     for _,callback in pairs(self.KeyUpListeners[keyCode]) do
         coroutine.wrap(callback)()
     end

@@ -14,12 +14,13 @@ local StaminaBar = Roact.PureComponent:extend("StaminaBar")
 function StaminaBar:init(props)
     self.StaminaBarRef = Roact.createRef()
     self:setState({
-        LastStamina = props.Stamina
+        LastStamina = props.Stamina,
+        Hide = true
     })
 end
 
 function StaminaBar:render()
-    --if not self.props.isShowing then return end
+    if self.state.Hide then return nil end
     return e("Frame", {
         [Roact.Ref] = self.StaminaBarRef,
         AnchorPoint = Vector2.new(0.5, 0.5),
@@ -27,7 +28,7 @@ function StaminaBar:render()
         Position = UDim2.fromScale(0.5, 0.85),
         Size = UDim2.fromScale(0.2, 0.012),
         BackgroundColor3 = Color3.new(),
-        BackgroundTransparency = 1
+        BackgroundTransparency = 1,
     }, {
         InnerBar = e("Frame", {
             BorderSizePixel = 0,
@@ -35,6 +36,13 @@ function StaminaBar:render()
             Position = UDim2.fromScale(0, 0),
             BackgroundColor3 = Color3.new(1, 1, 1),
             BackgroundTransparency = 1
+        }, { 
+            UICorner = Roact.createElement("UICorner", {
+                CornerRadius = UDim.new(1, 0)
+            })
+        }),
+        UICorner = Roact.createElement("UICorner", {
+            CornerRadius = UDim.new(1, 0)
         })
     })
 end
@@ -55,14 +63,18 @@ function StaminaBar:TweenOut()
     TweenService:Create(bar.InnerBar, BarTweenInfo, { BackgroundTransparency = 1 }):Play()
     tween.Completed:Connect(function()
         tween:Destroy()
+        self:setState({ 
+            Hide = true
+        })
     end)
     tween:Play()
 end
 
 function StaminaBar:TweenBar()
     local bar = self.StaminaBarRef:getValue()
+    if not bar then return end
     local tween = TweenService:Create(bar.InnerBar, InnerBarTweenInfo, {
-        Size = UDim2.fromScale(self.props.Stamina/100, 1) 
+        Size = UDim2.fromScale(self.props.Stamina/100, 1)
     })
     tween.Completed:Connect(function()
         tween:Destroy()
@@ -71,11 +83,20 @@ function StaminaBar:TweenBar()
 end
 
 function StaminaBar:didUpdate(lastProps, lastState)
-    if not lastProps.isShowing and self.props.isShowing then
+    if self.state.Hide and self.props.isShowing then
+        self:setState({
+            Hide = false
+        })
+        return
+    elseif not self.state.Hide and lastState.Hide then
         self:TweenIn()
-    elseif lastProps.isShowing and not self.props.isShowing then
+        return
+    elseif not self.state.Hide and not self.props.isShowing then
         self:TweenOut()
-    else
+        return
+    end
+
+    if self.state.LastStamina ~= self.props.Stamina then
         -- stamina state updated
         self:TweenBar()
         self.state.LastStamina = self.props.Stamina
@@ -86,7 +107,7 @@ StaminaBar = RoactRodux.connect(
     function(state, props)
         return {
             Stamina = state.Stamina,
-            isShowing = state.UIShowing.StaminaBar
+            isShowing = state.StaminaBar.Enabled
         }
     end
 )(StaminaBar)

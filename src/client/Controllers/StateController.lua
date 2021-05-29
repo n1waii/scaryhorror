@@ -13,8 +13,16 @@ local StateController = Knit.CreateController {
 
 local InitialState = {
     Stamina = 100,
-    UIShowing = {
-        StaminaBar = false
+    StaminaBar = {
+        Enabled = false,
+    },
+    ProximityPrompt = {
+        Enabled = false,
+        Mount = nil,
+        ActionText = "_none"
+    },
+    Cursor = {
+        Active = false
     }
 }
 
@@ -38,23 +46,37 @@ local StaminaReducer = Rodux.createReducer(InitialState.Stamina, {
     end
 })
 
-local UIShowingReducer = Rodux.createReducer(InitialState.UIShowing, {
-    ShowUI = function(state, action)
-        state = shallowcopy(state)
-        state[action.UI] = true
-        return state
-    end,
+local StaminaBarReducer = Rodux.createReducer(InitialState.StaminaBar, {
+    SetStaminaBar = function(state, action)
+        local newState = shallowcopy(state)
+        newState.Enabled = action.Enabled
+        return newState
+    end
+})
 
-    HideUI = function(state, action)
-        state = shallowcopy(state)
-        state[action.UI] = false
-        return state
+local ProximityPromptReducer = Rodux.createReducer(InitialState.ProximityPrompt, {
+    SetProximityPrompt = function(state, action)
+        local newState = shallowcopy(state)
+        newState.Enabled = action.Enabled
+        newState.Mount = action.Mount
+        newState.ActionText = action.ActionText
+        return newState
+    end
+})
+
+local CursorReducer = Rodux.createReducer(InitialState.Cursor, {
+    SetCursor = function(state, action)
+        local newState = shallowcopy(state)
+        newState.Active = action.Active and true or false
+        return newState
     end
 })
 
 local MainReducer = Rodux.combineReducers({
     Stamina = StaminaReducer,
-    UIShowing = UIShowingReducer
+    StaminaBar = StaminaBarReducer,
+    ProximityPrompt = ProximityPromptReducer,
+    Cursor = CursorReducer
 })
 
 function StateController:KnitStart()

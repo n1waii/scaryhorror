@@ -47,15 +47,15 @@ function CharacterController:KnitStart()
 
     CharacterService.SprintingStarted:Connect(function()
         StateController.Store:dispatch({
-            type = "ShowUI",
-            UI = "StaminaBar"
+            type = "SetStaminaBar",
+            Enabled = true
         })
     end)
 
     CharacterService.FullyRegened:Connect(function()
         StateController.Store:dispatch({
-            type = "HideUI",
-            UI = "StaminaBar"
+            type = "SetStaminaBar",
+            Enabled = false
         })
     end)
 
