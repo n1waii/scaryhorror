@@ -8,7 +8,6 @@ local Cutscene = {
 Cutscene.__index = Cutscene
 
 function Cutscene.new(scenes)
-	print("made cutscene")
 	return setmetatable({
 		Scenes = scenes,
 		Playing = false
@@ -16,10 +15,10 @@ function Cutscene.new(scenes)
 end
 
 function Cutscene:Play()
-	print("playing")
 	if self.Playing then return end
 	self.Playing = true
 	for _,obj in ipairs(self.Scenes) do
+		if not self.Playing then return end
 		local _type = obj.__type
 		if _type == "Camera" or _type == "Delay" or _type == "Effect" then
 			obj:Start()
@@ -27,8 +26,12 @@ function Cutscene:Play()
 			error("Unknown object type in scenes")
 		end
 	end
-	Camera:Reset()
+	
+end
+
+function Cutscene:Stop()
 	self.Playing = false
+	Camera:Reset()
 end
 
 return Cutscene

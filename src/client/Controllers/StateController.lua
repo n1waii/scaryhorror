@@ -19,7 +19,6 @@ local InitialState = {
     ProximityPrompt = {
         Enabled = false,
         Mount = nil,
-        ActionText = "_none"
     },
     Cursor = {
         Active = false
@@ -59,7 +58,6 @@ local ProximityPromptReducer = Rodux.createReducer(InitialState.ProximityPrompt,
         local newState = shallowcopy(state)
         newState.Enabled = action.Enabled
         newState.Mount = action.Mount
-        newState.ActionText = action.ActionText
         return newState
     end
 })

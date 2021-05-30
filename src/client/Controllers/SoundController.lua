@@ -8,6 +8,10 @@ local SoundController = Knit.CreateController {
     CharacterSounds = {}
 }
 
+function SoundController:GetSound()
+    
+end
+
 function SoundController:KnitStart()
     local StateController = Knit.Controllers.StateController
     self.CharacterSounds.Breathing = Soundly.Sound.new(workspace.GameSounds, {

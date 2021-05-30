@@ -64,7 +64,7 @@ function ProximityPrompt:render()
                     Position = UDim2.fromScale(0.5, 0.5),
                     Size = UDim2.fromScale(0.8, 0.7),
                     Font = Enum.Font.SourceSans,
-                    Text = self.state.ActionText,
+                    Text = self.state.Mount:GetAttribute("ActionText"),
                     TextColor3 = Color3.new(1, 1, 1),
                     TextScaled = true
                 })
@@ -107,9 +107,10 @@ function ProximityPrompt:didUpdate(lastProps, lastState)
                 local distance = (humRP.Position-self.state.Mount.Position).Magnitude
                 local proximityPrompt = self.PromptRef:getValue()
                 if proximityPrompt then
-                    local textTransparency = map(distance, 0, PROXIMITY_DISTANCE, -0.3, 1)
-                    local bgTransparency = map(distance, 0, PROXIMITY_DISTANCE, -0.3, 1)
+                    local textTransparency = map(distance, 0, PROXIMITY_DISTANCE, 0, 0.9)
+                    local bgTransparency = map(distance, 0, PROXIMITY_DISTANCE, 0, 0.8)
                     
+                    proximityPrompt.Main.ActionFrame.ActionText.Text = self.state.Mount:GetAttribute("ActionText")
                     proximityPrompt.Main.ActionFrame.BackgroundTransparency = bgTransparency
                     proximityPrompt.Main.E_Frame.BackgroundTransparency = bgTransparency
                     proximityPrompt.Main.ActionFrame.ActionText.TextTransparency = textTransparency
@@ -131,8 +132,7 @@ ProximityPrompt = RoactRodux.connect(
     function(state, props)
         return {
             Mount = state.ProximityPrompt.Mount,
-            isShowing = state.ProximityPrompt.Enabled,
-            ActionText = state.ProximityPrompt.ActionText
+            isShowing = state.ProximityPrompt.Enabled
         }
     end
 )(ProximityPrompt)

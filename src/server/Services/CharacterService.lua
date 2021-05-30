@@ -97,7 +97,7 @@ function CharacterService:StartSprinting(player)
             MAX_STAMINA   
         ))
 
-        if character:GetAttribute("Stamina") == 0 then
+        if character:GetAttribute("Stamina") == 0 or character.Humanoid.MoveDirection.Magnitude == 0 then
             self:StopSprinting(player)
             break
         end
@@ -106,7 +106,7 @@ function CharacterService:StartSprinting(player)
     end
 end
 
-function CharacterService:KnitStart()
+function CharacterService:KnitInit()
     self.Client.StartSprinting:Connect(function(player)
         self:StartSprinting(player)
     end)

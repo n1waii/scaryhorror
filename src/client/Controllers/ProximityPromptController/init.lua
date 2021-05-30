@@ -4,9 +4,6 @@ local RunService = game:GetService("RunService")
 
 local TRIGGER_KEYCODE = Enum.KeyCode.E
 local PROMPT_RANGE = 10
-local CALLBACK_MAPPINGS = {
-    Door = "DoorController"
-}
 
 local Knit = require(ReplicatedStorage.Knit)
 
@@ -47,8 +44,7 @@ function ProximityPromptController:SetupPromptHovering()
                                 StateController.Store:dispatch({
                                     type = "SetProximityPrompt",
                                     Enabled = true,
-                                    Mount = prompt,
-                                    ActionText = prompt:GetAttribute("ActionText")
+                                    Mount = prompt
                                 })
                                 StateController.Store:dispatch({
                                     type = "SetCursor",
@@ -91,8 +87,15 @@ function ProximityPromptController:SetupPromptTriggering()
     local InputController = Knit.Controllers.InputController
     
     InputController:WhenKeyDown(TRIGGER_KEYCODE, function()
-        if not self.CanTrigger then return end
-        print("triggered")
+        if not self.CanTrigger or not self.CurrentPrompt then return print("no") end
+        if not self.CurrentPrompt:GetAttribute("Triggerable") then return print'cant trigger' end
+        local promptController = Knit.Controllers[self.CurrentPrompt:GetAttribute("Controller")]
+        if promptController then
+            self.CanTrigger = false
+            promptController:PromptCallback(self.CurrentPrompt)
+            wait(0.5)
+            self.CanTrigger = true
+        end
     end)
 end
 

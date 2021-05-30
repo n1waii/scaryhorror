@@ -26,7 +26,7 @@ function CharacterController:SetTransparencyModifiers(character)
     for _,armPart in pairs(R15_ARMS) do
         local p = character:WaitForChild(armPart, 1)
         if p then
-            p.LocalTransparencyModifier = 0
+            p.LocalTransparencyModifier = 1
         end
     end
 end

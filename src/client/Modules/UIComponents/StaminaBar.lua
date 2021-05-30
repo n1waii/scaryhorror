@@ -25,7 +25,7 @@ function StaminaBar:render()
         [Roact.Ref] = self.StaminaBarRef,
         AnchorPoint = Vector2.new(0.5, 0.5),
         BorderSizePixel = 0,
-        Position = UDim2.fromScale(0.5, 0.85),
+        Position = UDim2.fromScale(0.5, 0.8),
         Size = UDim2.fromScale(0.2, 0.012),
         BackgroundColor3 = Color3.new(),
         BackgroundTransparency = 1,
