@@ -51,6 +51,17 @@ function InventoryService:AddItem(player, itemName)
     if thisItemData then
         thisItemData.Tool:Clone().Parent = player.Backpack
         self.Client.InventoryChanged:Fire(player, TableUtil.cast(player.Backpack:GetChildren(), tostring))
+    else
+        warn(("Tried giving invalid item of '%s' to %s"):format(itemName, player.Name))
+    end
+end
+
+function InventoryService:GiveAllItem(itemName)
+    local thisItemData = ItemData[itemName]
+    if thisItemData then
+        for _,player in pairs(Players:GetPlayers()) do
+            self:AddItem(player, itemName)
+        end
     end
 end
 

@@ -104,6 +104,10 @@ function DialogueController:KnitInit()
     DialogueService.PlayMultipleText:Connect(function(...)
         self:PlayMultipleText(...)
     end)
+
+    DialogueService.PlayLine:Connect(function(...)
+        self:PlayLine(...)
+    end)
 end
 
 return DialogueController
