@@ -6,7 +6,8 @@ local DoorCloseTweenInfo = TweenInfo.new(0.7, Enum.EasingStyle.Sine, Enum.Easing
 
 local Knit = require(ReplicatedStorage.Knit) 
 local DoorController = Knit.CreateController {
-    Name = "DoorController"
+    Name = "DoorController",
+    LockCallbackCooldown = false
 }
 
 function DoorController:CloseDoor(doorModel, closedCFrame)
@@ -32,15 +33,43 @@ function DoorController:PromptCallback(proximityPart)
     DoorService.PromptTriggered:Fire(proximityPart)
 end
 
+function DoorController:TryKeypadDoor(keycode)
+    local DoorService = Knit.GetService("DoorService")
+    DoorService.OpenKeypadDoor:Fire(keycode)
+    Knit.Controllers.StateController.Store:dispatch({
+        type = "SetKeypadEnabled",
+        Enabled = false
+    })
+end
+
+function DoorController:LockDoorCallback()
+    if self.LockCallbackCooldown then return end
+    self.LockCallbackCooldown = true
+    Knit.Controllers.DialogueController:PlayLine("37219")
+    wait(2)
+    self.LockCallbackCooldown = false
+end
+
 function DoorController:KnitStart()
     local DoorService = Knit.GetService("DoorService")
-    
+
     DoorService.CloseDoor:Connect(function(...)
         self:CloseDoor(...)
     end)
 
     DoorService.OpenDoor:Connect(function(...)
         self:OpenDoor(...)
+    end)
+
+    DoorService.LockedDoorCallback:Connect(function()
+        self:LockDoorCallback()
+    end)
+
+    DoorService.PromptKeypad:Connect(function()
+        Knit.Controllers.StateController.Store:dispatch({
+            type = "SetKeypadEnabled",
+            Enabled = true
+        })
     end)
 end
 

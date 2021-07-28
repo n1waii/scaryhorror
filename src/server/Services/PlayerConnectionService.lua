@@ -13,7 +13,9 @@ function PlayerConnectionService:PlayerAdded(player)
     player.CharacterAdded:Connect(function(character)
         self:CharacterAdded(character)
     end)
-    --player:LoadCharacter()
+    player:LoadCharacter()
+    wait(2)
+    Knit.Services.TriggerService:Trigger(player, "SpawnScene")
 end
 
 function PlayerConnectionService:PlayerRemoving(player)

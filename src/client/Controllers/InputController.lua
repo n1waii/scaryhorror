@@ -1,3 +1,5 @@
+local ControllerService = game:GetService("ControllerService")
+local ContextActionService = game:GetService("ContextActionService")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local UserInputService = game:GetService("UserInputService")
 
@@ -7,7 +9,8 @@ local InputController = Knit.CreateController {
     KeysDown = {},
     KeyDownListeners = {},
     KeyUpListeners = {},
-    MappedKeys = {}
+    MappedKeys = {},
+    ControllerCache = {}
 }
 
 function InputController:Map(keyCode, callback)
@@ -58,36 +61,54 @@ function InputController:WhenKeyUp(keyCode, callback)
     return pushIndex
 end
 
-function InputController:EmitKeyUp(keyCode)
+function InputController:EmitKeyUp(keyCode, ...)
     self.KeysDown[keyCode] = nil
     if not self.KeyUpListeners[keyCode] then return end
     for _,callback in pairs(self.KeyUpListeners[keyCode]) do
-        coroutine.wrap(callback)()
+        coroutine.wrap(callback)(...)
     end
 end
 
-function InputController:EmitKeyDown(keyCode)
+function InputController:EmitKeyDown(keyCode, ...)
     if self.KeysDown[keyCode] or not self.KeyDownListeners[keyCode] then return end
     self.KeysDown[keyCode] = true
     for _,callback in pairs(self.KeyDownListeners[keyCode]) do
-        coroutine.wrap(callback)()
+        coroutine.wrap(callback)(...)
     end
+end
+
+function InputController:DisablePlayerControls()
+    for _,controller in pairs(ControllerService:GetChildren()) do
+        controller.Parent = nil
+        table.insert(self.ControllerCache, controller)
+    end
+end
+
+function InputController:EnablePlayerControls()
+    for _,controller in pairs(self.ControllerCache) do
+        controller.Parent = nil
+    end
+    self.ControllerCache = {}
+end
+
+function InputController:GetContextActionService()
+    return ContextActionService
 end
 
 function InputController:KnitStart()
     UserInputService.InputBegan:Connect(function(input, gameProcessed)
-        if gameProcessed then return end
         if input.UserInputType == Enum.UserInputType.Keyboard then
-            self:EmitKeyDown(input.KeyCode)
+            self:EmitKeyDown(input.KeyCode, gameProcessed)
         end
     end)
 
     UserInputService.InputEnded:Connect(function(input, gameProcessed)
-        if gameProcessed then return end
         if input.UserInputType == Enum.UserInputType.Keyboard then
-            self:EmitKeyUp(input.KeyCode)
+            self:EmitKeyUp(input.KeyCode, gameProcessed)
         end
     end)
+
+    UserInputService.MouseIconEnabled = false
 end
 
 return InputController

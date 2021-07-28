@@ -25,7 +25,7 @@ function StaminaBar:render()
         [Roact.Ref] = self.StaminaBarRef,
         AnchorPoint = Vector2.new(0.5, 0.5),
         BorderSizePixel = 0,
-        Position = UDim2.fromScale(0.5, 0.8),
+        Position = UDim2.fromScale(0.125, 0.95),
         Size = UDim2.fromScale(0.2, 0.012),
         BackgroundColor3 = Color3.new(),
         BackgroundTransparency = 1,
@@ -63,7 +63,7 @@ function StaminaBar:TweenOut()
     TweenService:Create(bar.InnerBar, BarTweenInfo, { BackgroundTransparency = 1 }):Play()
     tween.Completed:Connect(function()
         tween:Destroy()
-        self:setState({ 
+        self:setState({
             Hide = true
         })
     end)

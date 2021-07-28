@@ -9,7 +9,8 @@ local Character = Player.Character or Player.CharacterAdded:Wait()
 local Camera = workspace.CurrentCamera
 
 local CharacterController = Knit.CreateController {
-    Name = "CharacterController"
+    Name = "CharacterController",
+    CanSprint = true
 }
 
 local R15_ARMS = {
@@ -31,6 +32,27 @@ function CharacterController:SetTransparencyModifiers(character)
     end
 end
 
+function CharacterController:SetCanSprint(bool)
+    self.CanSprint = bool
+end
+
+function CharacterController:SetCharacterCFrame(cf)
+    Character = Player.Character
+    if Character then
+        Character:SetPrimaryPartCFrame(cf * CFrame.new(0, Character.Humanoid.HipHeight, 0))
+    end
+end
+
+function CharacterController:OnCharacterAdded(character)
+    Character = character
+    Character:GetAttributeChangedSignal("Stamina"):Connect(function()
+        Knit.Controllers.StateController.Store:dispatch({
+            type = "SetStamina",
+            Stamina = Character:GetAttribute("Stamina")
+        })
+    end)
+end
+
 function CharacterController:KnitStart()
     local CharacterService = Knit.GetService("CharacterService")
     local StateController = Knit.Controllers.StateController
@@ -38,11 +60,10 @@ function CharacterController:KnitStart()
     local UIController = Knit.Controllers.UIController
     
     -- sprinting
-    Character:GetAttributeChangedSignal("Stamina"):Connect(function()
-        StateController.Store:dispatch({
-            type = "SetStamina",
-            Stamina = Character:GetAttribute("Stamina")
-        })
+    CharacterController:OnCharacterAdded(Character)
+
+    Player.CharacterAdded:Connect(function(character)
+        self:OnCharacterAdded(character)
     end)
 
     CharacterService.SprintingStarted:Connect(function()
@@ -59,7 +80,9 @@ function CharacterController:KnitStart()
         })
     end)
 
-    InputController:WhenKeyDown(Enum.KeyCode.LeftShift, function()
+    InputController:WhenKeyDown(Enum.KeyCode.LeftShift, function(gameProcessed)
+        if gameProcessed then return end
+        if not self.CanSprint then return end
         CharacterService.StartSprinting:Fire()
     end)
 
@@ -67,9 +90,9 @@ function CharacterController:KnitStart()
         CharacterService.StopSprinting:Fire()
     end)
 
-    Player.CharacterAdded:Connect(function(character)
-        self:CharacterAdded(character)
-    end)
+    -- Player.CharacterAdded:Connect(function(character)
+    --     self:CharacterAdded(character)
+    -- end)
 
     RunService.RenderStepped:Connect(function()
         if Player.Character then

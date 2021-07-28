@@ -18,7 +18,6 @@ local ProximityPromptController = Knit.CreateController {
 }
 
 function ProximityPromptController:AddPrompt(part)
-    print("added new prompt: ", part.Name)
     self.ActivePrompts[part] = true
 end
 

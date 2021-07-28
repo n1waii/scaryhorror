@@ -1,86 +1,97 @@
 local RunService = game:GetService("RunService")
 
+local Binder = require(script.Parent.Binder)
+
 local Sound = {}
 Sound.__index = Sound
 
-function Sound.new(mount, props, effects)
-    assert(mount ~= nil and props ~= nil, "nil argument passed to Sound.new")
+function Sound.new(mount, props)
+    assert(mount ~= nil, "Argument 1 missing or nil")
     local soundInstance = Instance.new("Sound")
     
-    for prop, value in pairs(props) do
-        soundInstance[prop] = value
-    end
+    local events = {
+        _TimePositionReached = Instance.new("BindableEvent"),
+        _Played = Instance.new("BindableEvent")
+    }
 
-    if effects then
-        for effectName, effectProps in pairs(effects) do
-            local effectInstance = Instance.new(effectName)
-            for effectProp, effectValue in pairs(effectProps) do
-                effectInstance[effectProp] = effectValue
+    local self = setmetatable({
+        Instance = soundInstance,
+        Ended = soundInstance.Ended,
+        EventBindables = events,
+        Played = events._Played.Event
+    }, Sound)
+
+    if props then
+        for prop, value in pairs(props) do
+            if typeof(value) == "table" and value.__type == "Binding" then
+                props[prop] = value:_startBinding(self, prop)
+            else
+                soundInstance[prop] = value
             end
         end
     end
 
     soundInstance.Parent = mount
     
-    return setmetatable({
-        Instance = soundInstance,
-        BindedProperties = {
-            Sound = {},
-            Effects = {}
-        }, 
-        BinderConnection = nil
-    }, Sound)
+    return self
 end
 
-function Sound:CreateBindingConnection()
-    if self.BinderConnection then return end
-    local soundInstance = self:GetSoundInstance()
-    self.BinderConnection = RunService.RenderStepped:Connect(function()
-        for prop, callback in pairs(self.BindedProperties.Sound) do
-            soundInstance[prop] = callback()
-        end
+function Sound:GetTimePositionReachedSignal(t, callback)
+    -- TO DO
+    -- local instance = self:GetSoundInstance()
+    -- assert(t <= instance.TimeLength and t >= 0, "TimePosition argument must be >= 0 and <= Sound.TimeLength")
 
-        for effect, bindedProps in pairs(self.BindedProperties.Effects) do
-            for prop, callback in pairs(bindedProps) do
-                soundInstance[effect][prop] = callback()
-            end
-        end
-    end)
 end
 
-function Sound:BindProperty(prop, callback)
-    if self.BindedProperties.Sound[prop] then return end
-    local soundInstance = self:GetSoundInstance()
-    assert(pcall(function()
-        return soundInstance[prop] 
-    end, ("Property '%s' does not exist for Sound Instance"):format(prop)))
-    
-    self.BindedProperties.Sound[prop] = callback
-    self:CreateBindingConnection()
+function Sound:FadeOut()
+    local sound = self:GetSoundInstance()
+    for i = sound.Volume, 0, 0.01 do
+        sound.Volume = i
+        wait(0.01)
+    end
 end
 
-function Sound:BindEffectProperty(effect, prop, callback)
-    if self.BindedProperties.Sound[prop] then return end
-    local soundInstance = self:GetSoundInstance()
+function Sound:FadeIn(volume)
+    local sound = self:GetSoundInstance()
+    for i = 0, volume, 0.005 do
+        sound.Volume = i
+        RunService.Heartbeat:Wait()
+    end
+end
 
-    assert(pcall(function()
-        return soundInstance[effect]
-    end, ("Effect Instance '%s' is not a child of Sound Instance"):format(effect)))
-    
-    assert(pcall(function()
-        return soundInstance[effect][prop] 
-    end, ("Property '%s' does not exist for Sound Instance"):format(prop)))
-    
-    self.BindedProperties.Sound[prop] = callback
-    self:CreateBindingConnection()
+function Sound:Stop()
+    self:GetSoundInstance():Stop()
 end
 
 function Sound:Play()
-    return self:GetSoundInstance():Play()
+    self:GetSoundInstance():Play()
+    self.EventBindables._Played:Fire()
+end
+
+function Sound:PlayOnce()
+    coroutine.wrap(function()
+        self:Play()
+        self:GetSoundInstance().Ended:Wait()
+        self:Destroy()
+    end)()
+end
+
+function Sound:SetProperty(prop, value)
+    self:GetSoundInstance()[prop] = value
+end
+
+function Sound:GetProperty(prop)
+    return self:GetSoundInstance()[prop]
 end
 
 function Sound:GetSoundInstance()
     return self.Instance
+end
+
+function Sound:Destroy()
+    Binder:UnbindAll(self)
+    self:GetSoundInstance():Destroy()
+    self = nil
 end
 
 return Sound
