@@ -90,6 +90,7 @@ end
 
 function Sound:Destroy()
     Binder:UnbindAll(self)
+    self:GetSoundInstance():Stop()
     self:GetSoundInstance():Destroy()
     self = nil
 end

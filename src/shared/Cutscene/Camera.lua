@@ -28,7 +28,7 @@ end
 function Camera:Start()
 	CurrentCamera.CameraType = Enum.CameraType.Scriptable
 	CurrentCamera.CFrame = self.CFrame
-	self.Callback(self)         
+	self.Callback(self)  
 end
 
 function Camera:TweenTo(cframe, tweenInfo)

@@ -1,15 +1,16 @@
 return {
     ["1"] = {
         Completed = false,
-        Text = "Find the main door key",
+        Text = "Answer the phone",
         Id = "1"
     },
 
     ["2"] = {
         Completed = false,
-        Text = "Find something else lol",
+        Text = "Check the main door",
         Id = "2"
     },
+
 
     ["3"] = {
         Completed = false,

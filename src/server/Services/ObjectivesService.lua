@@ -10,11 +10,28 @@ local ObjectivesService = Knit.CreateService {
         AddObjective = RemoteSignal.new(),
         CompleteObjective = RemoteSignal.new(),
         RemoveObjective = RemoteSignal.new(),
-    }
+    },
+    PlayerObjectives = {}
 }
+
+local function AddPlayerObjective(id)
+    for _,player in pairs(Players:GetPlayers()) do
+        if not ObjectivesService.PlayerObjectives[player] then
+            ObjectivesService.PlayerObjectives[player] = {}
+        end
+        ObjectivesService.PlayerObjectives[player][id] = true
+    end
+end
+
+local function RemovePlayerObjective(id)
+    for _,player in pairs(Players:GetPlayers()) do
+        ObjectivesService.PlayerObjectives[player][id] = nil
+    end
+end
 
 function ObjectivesService:AddObjective(id)
     self.Client.AddObjective:FireAll(id)
+    AddPlayerObjective(id)
 end
 
 function ObjectivesService:RemoveObjective(id)
@@ -23,6 +40,10 @@ end
 
 function ObjectivesService:CompleteObjective(id)
     self.Client.RemoveObjective:FireAll(id)
+end
+
+function ObjectivesService:HasObjective(player, id)
+    return self.PlayerObjectives[player][id]
 end
 
 return ObjectivesService

@@ -41,6 +41,14 @@ return {
         Looped = false,
         Volume = 0.5
     },
+    TelephoneRinging = {
+        Name = "TelephoneRinging",
+        RollOffMaxDistance = 1000,
+        RollOffMinDistance = 10,
+        Looped = true,
+        Volume = 0.5,
+        SoundId = "rbxassetid://1472770889"
+    },
     Intro = {
         RadioTalking = {
             Name = "RadioTalking",

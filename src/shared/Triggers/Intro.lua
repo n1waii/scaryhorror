@@ -158,7 +158,7 @@ local function CrashCar()
 end
 
 return {
-    Server = function(player, event)
+    Server = function(player, event, triggerPart)
         TriggerService.Client.TriggerClientCallback:Fire(player, player, event)
     end,
 

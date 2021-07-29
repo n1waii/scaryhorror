@@ -25,8 +25,12 @@ function DialogueController:GetWaitLength(text)
     return seconds
 end
 
-function DialogueController:PlayMultipleText(texts, soundIds)
+function DialogueController:PlayMultipleText(texts, soundIds, soundMount)
     local StateController = Knit.Controllers.StateController
+    local thisSoundProperties = TableUtil.shallowcopy(SoundProperties.Dialogue)
+    local sound = Soundly.CreateSound(soundMount or workspace.GameSounds, thisSoundProperties)
+    Knit.Controllers.SoundController:CacheSound("DialogueSound", sound)
+
     for i = 1, #texts do
         StateController.Store:dispatch({
             type = "SetDialogue",
@@ -34,15 +38,22 @@ function DialogueController:PlayMultipleText(texts, soundIds)
             Text = texts[i]
         })
         if soundIds and soundIds[i] then
-            
+            thisSoundProperties.SoundId = soundIds[i]
+            if not sound.IsLoaded then
+                sound.Loaded:Wait()
+            end
+            sound:Play()
+            sound.Ended:Wait()
         else
             wait(self:GetWaitLength(texts[i]))
         end
     end
+
+    sound:Destroy()
     self:StopText()
 end
 
-function DialogueController:PlayLine(id, callback)
+function DialogueController:PlayLine(id, soundMount, callback)
     local line = Chapter1Lines.Story[id] or Chapter1Lines.Misc[id]
     assert(line ~= nil, ("Line '%s' not found"):format(id))
     
@@ -51,18 +62,18 @@ function DialogueController:PlayLine(id, callback)
     end
 
     if typeof(line.Text) == "table" and not line.RandomChoice then
-        self:PlayMultipleText(line.Text, line.Audio)
+        self:PlayMultipleText(line.Text, line.Audio, soundMount)
     elseif typeof(line.Text) == "table" and line.RandomChoice then
         local random = math.random(#line.Text)
-        self:PlayText(line.Text[random], line.Audio[random])
+        self:PlayText(line.Text[random], line.Audio[random], soundMount)
     else
-        self:PlayText(line.Text)
+        self:PlayText(line.Text, soundMount)
     end
     
     return DialogueController
 end
 
-function DialogueController:PlayText(text, soundId)
+function DialogueController:PlayText(text, soundId, soundMount)
     local StateController = Knit.Controllers.StateController
     StateController.Store:dispatch({
         type = "SetDialogue",
@@ -73,7 +84,8 @@ function DialogueController:PlayText(text, soundId)
     if soundId then
         local thisSoundProperties = TableUtil.shallowcopy(SoundProperties.Dialogue)
         thisSoundProperties.SoundId = soundId
-        local sound = Soundly.CreateSound(workspace.GameSounds, thisSoundProperties)
+        local sound = Soundly.CreateSound(soundMount or workspace.GameSounds, thisSoundProperties)
+        Knit.Controllers.SoundController:CacheSound("DialogueSound", sound)
         sound:PlayOnce()
         sound.Ended:Wait()
     else
@@ -91,7 +103,8 @@ function DialogueController:StopText()
         Enabled = false,
         Text = nil
     })
-    wait(1)
+    Knit.Controllers.SoundController:RemoveSound("DialogueSound")
+    --wait(1)
 end
 
 function DialogueController:KnitInit()

@@ -71,18 +71,47 @@ return {
 			Text = "James: AHHH!",
 			Audio = "rbxassetid://12345678"
 		},
+
+		["73921"] = { 
+			Text = {
+				"Telephone (man): Hey, I hope you're doing okay. I just heard the news and I'm so sorry for your loss.",
+				"James: Hey, thanks.",
+				"Telephone (man): Listen. If I can do anything for you or your kids, just let me know."
+			}
+		},
+
+		["93120"] = {
+			Text = "James: Hold on. Someone's at the door."
+		},
+
+		["37892"] = {
+			Text = "James: Hey, sorry. I thought I heard knocking on the door."
+		},
+
+		["38210"] = {
+			Text = "(unknown): I... am... right... there..."
+		},
+
+		["37291"] = {
+			Text = {
+				"Telephone (man): Hey, you alright? You sound kinda upset?",
+				"James: Yeah, I'm just tired I guess.",
+				"Telephone (man): I understand. You should go to bed. Again, if you need any help, just let me know.",
+				"James: Thanks, bye."
+			}
+		}
 	},
 
 	Misc = { -- text that plays when player does something goes here. for example, going into some dark room.
 		["403921"] = {
-			Text = "This room is pretty dark",
+			Text = "James: This room is pretty dark",
 			Audio = "rbxassetid://12345678"
 		},
 		["37219"] = {
 			Text = {
-				"Hm... this door is locked.",
-				"I'll need a key to open this door.",
-				"It's locked."
+				"James: Hm... this door is locked.",
+				"James: I'll need a key to open this door.",
+				"James: It's locked."
 			},
 			Audio = {
 				"rbxassetid://7065511279",

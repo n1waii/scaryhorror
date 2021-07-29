@@ -6,7 +6,8 @@ local SoundProperties = require(ReplicatedStorage.SoundProperties)
 
 local SoundController = Knit.CreateController {
     Name = "SoundController",
-    CharacterSounds = {}
+    CharacterSounds = {},
+    CachedSounds = {}
 }
 
 function SoundController:Map(value, minA, maxA, minB, maxB)
@@ -21,6 +22,21 @@ end
 function SoundController:PlayCharacterSounds()
     self.CharacterSounds.Breathing:Play()
     self.CharacterSounds.Heartbeat:Play()
+end
+
+function SoundController:CacheSound(name, soundlySound)
+    self.CachedSounds[name] = soundlySound
+end
+
+function SoundController:RemoveSound(name)
+    if self.CachedSounds[name] then
+        self.CachedSounds[name]:Destroy()
+    end
+    self.CachedSounds[name] = nil
+end
+
+function SoundController:GetSound(name)
+    return self.CachedSounds[name]
 end
 
 function SoundController:KnitStart()
