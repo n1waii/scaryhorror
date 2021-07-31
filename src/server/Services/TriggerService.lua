@@ -16,10 +16,10 @@ local TriggerService = Knit.CreateService {
     Triggered = {}
 }
 
-function TriggerService:Trigger(player, event)
+function TriggerService:Trigger(player, event, triggerPart)
     local eventTriggers = require(TriggersFolder.Chapter1)[event]
     assert(eventTriggers ~= nil, "Event triggers don't exit for event '".. event .."'")
-    eventTriggers.Server(player, event)
+    eventTriggers.Server(player, event, triggerPart)
 end
 
 function TriggerService:AddTriggered(player, event)
@@ -45,7 +45,7 @@ function TriggerService:SetupTriggerParts()
                     if part:GetAttribute("Once") then
                         conn:Disconnect()
                     end
-                    self:Trigger(player, part:GetAttribute("EventName")) 
+                    self:Trigger(player, part:GetAttribute("EventName"), part)
                 end
             end
         end)

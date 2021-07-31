@@ -94,7 +94,6 @@ function Dialogue:TextTransitionIn(newText)
     tween:Play()
 end
 
-
 function Dialogue:didUpdate(lastProps, lastState)
     if self.state.Hide and self.props.isShowing then
         self:setState({

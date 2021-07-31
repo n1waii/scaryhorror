@@ -53,6 +53,16 @@ function CharacterController:OnCharacterAdded(character)
     end)
 end
 
+function CharacterController:DisableMovement()
+    self:SetCanSprint(false)
+    Character.Humanoid.WalkSpeed = 0
+end
+
+function CharacterController:EnableMovement()
+    self:SetCanSprint(true)
+    Character.Humanoid.WalkSpeed = 8
+end
+
 function CharacterController:KnitStart()
     local CharacterService = Knit.GetService("CharacterService")
     local StateController = Knit.Controllers.StateController

@@ -1,4 +1,8 @@
 local RunService = game:GetService("RunService")
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+
+local Knit = require(ReplicatedStorage.Knit)
+local Promise = require(Knit.Util.Promise)
 
 local Binder = require(script.Parent.Binder)
 
@@ -69,11 +73,12 @@ function Sound:Play()
 end
 
 function Sound:PlayOnce()
-    coroutine.wrap(function()
+    return Promise.new(function(res, rej)
         self:Play()
         self:GetSoundInstance().Ended:Wait()
         self:Destroy()
-    end)()
+        res()
+    end)
 end
 
 function Sound:SetProperty(prop, value)
@@ -90,6 +95,7 @@ end
 
 function Sound:Destroy()
     Binder:UnbindAll(self)
+    self:GetSoundInstance():Stop()
     self:GetSoundInstance():Destroy()
     self = nil
 end

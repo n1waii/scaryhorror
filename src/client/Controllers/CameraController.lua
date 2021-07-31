@@ -30,7 +30,9 @@ end
 
 function CameraController:Scriptable(cf)
     Camera.CameraType = Enum.CameraType.Scriptable
-    Camera.CFrame = cf
+    if cf then
+        Camera.CFrame = cf
+    end
 end
 
 function CameraController:Track(part)

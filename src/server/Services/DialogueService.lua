@@ -8,7 +8,8 @@ local DialogueService = Knit.CreateService {
     Name = "DialogueService",
     Client = {
         PlayText = RemoteSignal.new(),
-        PlayMultipleText = RemoteSignal.new()
+        PlayMultipleText = RemoteSignal.new(),
+        PlayLine = RemoteSignal.new()
     }
 }
 
@@ -26,6 +27,14 @@ end
 
 function DialogueService:PlayMultipleText(player, texts)
     self.Client.PlayMultipleText:Fire(player, texts)
+end
+
+function DialogueService:PlayLine(player, id, mount)
+    self.Client.PlayLine:Fire(player, id, mount)
+end
+
+function DialogueService:PlayLineAll(id, mount)
+    self.Client.PlayLine:FireAll(id, mount)
 end
 
 return DialogueService

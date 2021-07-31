@@ -6,7 +6,8 @@ local SoundProperties = require(ReplicatedStorage.SoundProperties)
 
 local SoundController = Knit.CreateController {
     Name = "SoundController",
-    CharacterSounds = {}
+    CharacterSounds = {},
+    CachedSounds = {}
 }
 
 function SoundController:Map(value, minA, maxA, minB, maxB)
@@ -23,6 +24,21 @@ function SoundController:PlayCharacterSounds()
     self.CharacterSounds.Heartbeat:Play()
 end
 
+function SoundController:CacheSound(name, soundlySound)
+    self.CachedSounds[name] = soundlySound
+end
+
+function SoundController:RemoveSound(name)
+    if self.CachedSounds[name] then
+        self.CachedSounds[name]:Destroy()
+    end
+    self.CachedSounds[name] = nil
+end
+
+function SoundController:GetSound(name)
+    return self.CachedSounds[name]
+end
+
 function SoundController:KnitStart()
     local StateController = Knit.Controllers.StateController
     local BreathingSoundProps = SoundProperties.CharacterBreathing
@@ -30,7 +46,7 @@ function SoundController:KnitStart()
 
     BreathingSoundProps.Volume = Soundly.CreateBinding(function()
         local stamina = StateController.Store:getState().Stamina
-        return self:Map(stamina, 100, 0, 0.1, 1.3)
+        return self:Map(stamina, 100, 0, 0.05, 0.7)
     end)
 
     BreathingSoundProps.PlaybackSpeed = Soundly.CreateBinding(function()
@@ -40,7 +56,7 @@ function SoundController:KnitStart()
 
     HeartbeatSoundProps.Volume = Soundly.CreateBinding(function()
         local stamina = StateController.Store:getState().Stamina
-        return self:Map(stamina, 100, 0, 0.2, 0.8)
+        return self:Map(stamina, 100, 0, 0.05, 0.5)
     end)
 
     HeartbeatSoundProps.PlaybackSpeed = Soundly.CreateBinding(function()

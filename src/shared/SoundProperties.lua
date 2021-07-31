@@ -41,6 +41,36 @@ return {
         Looped = false,
         Volume = 0.5
     },
+    TelephoneRinging = {
+        Name = "TelephoneRinging",
+        RollOffMaxDistance = 100,
+        RollOffMinDistance = 10,
+        Looped = true,
+        Volume = 0.5,
+        SoundId = "rbxassetid://1472770889"
+    },
+    DoorKnocking = {
+        Name = "DoorKnocking",
+        RollOffMaxDistance = 100,
+        RollOffMinDistance = 10,
+        Volume = 0.5,
+        SoundId = "rbxassetid://366115240"
+    },
+    LightFlickering = {
+        Name = "LightFlickering",
+        RollOffMaxDistance = math.huge,
+        RollOffMinDistance = math.huge,
+        Looped = true,
+        Volume = 0.5,
+        SoundId = "rbxassetid://5500190500"
+    },
+    SpookyAmbience1 = {
+        Name = "SpookyAmbience1",
+        RollOffMaxDistance = math.huge,
+        RollOffMinDistance = math.huge,
+        Volume = 0.5,
+        SoundId = "rbxassetid://7175790995"
+    },
     Intro = {
         RadioTalking = {
             Name = "RadioTalking",

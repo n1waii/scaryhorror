@@ -14,7 +14,7 @@ function PlayerConnectionService:PlayerAdded(player)
         self:CharacterAdded(character)
     end)
     player:LoadCharacter()
-    wait(2)
+    wait(10)
     Knit.Services.TriggerService:Trigger(player, "SpawnScene")
 end
 
