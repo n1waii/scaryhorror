@@ -73,7 +73,7 @@ function UIController:KnitStart()
         return Roact.createElement("ScreenGui", {
             ResetOnSpawn = false,
             Enabled = props.Enabled,
-            IgnoreGuiInset = true
+            IgnoreGuiInset = false
         }, {
             StaminaBar = Roact.createElement(UIComponents.StaminaBar),
             Cursor = Roact.createElement(UIComponents.Cursor),

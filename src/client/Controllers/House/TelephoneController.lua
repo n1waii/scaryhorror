@@ -30,7 +30,7 @@ function TelephoneController:PromptCallback(proximityPart)
     TelephoneService.PromptTriggered:Fire(proximityPart)
 
     switch (proximityPart:GetAttribute("ActionText")) {
-        [TelephoneService.PromptActions.AnswerPhone] = function()
+        ["Answer phone"] = function()
             self:StopRinging()
         end
     }

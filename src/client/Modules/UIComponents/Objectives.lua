@@ -217,7 +217,7 @@ end
 function Objectives:didUpdate(lastProps, lastState)
     print("updated")
     local completedTasks = self:GetCompletedTasks()
-    print('Prop tasks: ', self.props.Tasks)
+    print('completed tasks: ', self.props.Tasks)
 
     if self.state.Hide and self.props.isShowing then
         self:setState({

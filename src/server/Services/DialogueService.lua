@@ -29,12 +29,12 @@ function DialogueService:PlayMultipleText(player, texts)
     self.Client.PlayMultipleText:Fire(player, texts)
 end
 
-function DialogueService:PlayLine(player, id)
-    self.Client.PlayLine:Fire(player, id)
+function DialogueService:PlayLine(player, id, mount)
+    self.Client.PlayLine:Fire(player, id, mount)
 end
 
-function DialogueService:PlayLineAll(id)
-    self.Client.PlayLine:FireAll(id)
+function DialogueService:PlayLineAll(id, mount)
+    self.Client.PlayLine:FireAll(id, mount)
 end
 
 return DialogueService

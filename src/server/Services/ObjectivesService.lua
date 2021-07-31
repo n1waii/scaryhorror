@@ -39,11 +39,11 @@ function ObjectivesService:RemoveObjective(id)
 end
 
 function ObjectivesService:CompleteObjective(id)
-    self.Client.RemoveObjective:FireAll(id)
+    self.Client.CompleteObjective:FireAll(id)
 end
 
 function ObjectivesService:HasObjective(player, id)
-    return self.PlayerObjectives[player][id]
+    return self.PlayerObjectives[player] and self.PlayerObjectives[player][id]
 end
 
 return ObjectivesService

@@ -105,7 +105,7 @@ local ObjectivesReducer = Rodux.createReducer(InitialState.Objectives, {
         local newState = TableUtil.shallowcopy(state)
         for i,objective in ipairs(newState.Tasks) do
             if objective.Id == action.Id then
-                table.remove(newState.Objectives, i)
+                table.remove(newState.Tasks, i)
                 break
             end
         end

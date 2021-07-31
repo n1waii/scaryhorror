@@ -36,7 +36,7 @@ function ProximityPromptController:SetupPromptHovering()
                 if model and model:FindFirstChild("AlphexusPrompt") then
                     local prompt = model.AlphexusPrompt
                     local dist = (Player.Character.HumanoidRootPart.Position-prompt.Position).Magnitude
-                    if self.ActivePrompts[prompt] then
+                    if prompt:GetAttribute("Triggerable") and self.ActivePrompts[prompt] then
                         if dist <= PROMPT_RANGE then
                             if self.CurrentPrompt ~= prompt then
                                 self.CurrentPrompt = prompt

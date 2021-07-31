@@ -84,12 +84,17 @@ return {
 			Text = "James: Hold on. Someone's at the door."
 		},
 
+		["381203"] = {
+			Text = "James: I could've sworn I heard knocking."
+		},
+
 		["37892"] = {
 			Text = "James: Hey, sorry. I thought I heard knocking on the door."
 		},
 
 		["38210"] = {
-			Text = "(unknown): I... am... right... there..."
+			Text = "(unknown): I... am... right... there...",
+			Audio = "rbxassetid://7181807032"
 		},
 
 		["37291"] = {
@@ -99,7 +104,7 @@ return {
 				"Telephone (man): I understand. You should go to bed. Again, if you need any help, just let me know.",
 				"James: Thanks, bye."
 			}
-		}
+		},
 	},
 
 	Misc = { -- text that plays when player does something goes here. for example, going into some dark room.

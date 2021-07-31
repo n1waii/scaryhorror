@@ -11,10 +11,9 @@ return {
         Id = "2"
     },
 
-
     ["3"] = {
         Completed = false,
-        Text = "demilo stinks lol",
+        Text = "Go back to the telephone",
         Id = "3"
     },
 

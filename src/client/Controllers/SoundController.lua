@@ -46,7 +46,7 @@ function SoundController:KnitStart()
 
     BreathingSoundProps.Volume = Soundly.CreateBinding(function()
         local stamina = StateController.Store:getState().Stamina
-        return self:Map(stamina, 100, 0, 0.1, 1.3)
+        return self:Map(stamina, 100, 0, 0.05, 0.7)
     end)
 
     BreathingSoundProps.PlaybackSpeed = Soundly.CreateBinding(function()
@@ -56,7 +56,7 @@ function SoundController:KnitStart()
 
     HeartbeatSoundProps.Volume = Soundly.CreateBinding(function()
         local stamina = StateController.Store:getState().Stamina
-        return self:Map(stamina, 100, 0, 0.2, 0.8)
+        return self:Map(stamina, 100, 0, 0.05, 0.5)
     end)
 
     HeartbeatSoundProps.PlaybackSpeed = Soundly.CreateBinding(function()

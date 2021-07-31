@@ -1,3 +1,7 @@
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+
+local Knit = require(ReplicatedStorage.Knit)
+local Promise = require(Knit.Util.Promise)
 local Camera, Delay, Effect = require(script.Camera), require(script.Delay), require(script.Effect)
 
 local Cutscene = {
@@ -15,23 +19,30 @@ function Cutscene.new(scenes)
 end
 
 function Cutscene:Play()
-	if self.Playing then return end
-	self.Playing = true
-	for _,obj in ipairs(self.Scenes) do
-		if not self.Playing then return end
-		local _type = obj.__type
-		if _type == "Camera" or _type == "Delay" or _type == "Effect" then
-			obj:Start()
-		else
-			error("Unknown object type in scenes")
+	return Promise.new(function(res, rej)
+		if self.Playing then return end
+		self.Playing = true
+		for _,obj in ipairs(self.Scenes) do
+			if not self.Playing then return end
+			local _type = obj.__type
+			if _type == "Camera" or _type == "Delay" or _type == "Effect" then
+				obj:Start()
+			else
+				rej("Unknown object type in scenes")
+			end
 		end
-	end
-	
+		res()
+	end)
 end
 
 function Cutscene:Stop()
 	self.Playing = false
 	Camera:Reset()
+end
+
+function Cutscene:Destroy()
+	self:Stop()
+	self = nil
 end
 
 return Cutscene
