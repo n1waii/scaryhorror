@@ -91,11 +91,10 @@ function ProximityPrompt:render()
 end
 
 function ProximityPrompt:didUpdate(lastProps, lastState)
-    if self.state.Hide and self.props.isShowing then
-        return self:setState({
+    if (self.state.Hide and self.props.isShowing) or (self.props.Mount ~= nil and self.props.Mount ~= self.state.Mount) then
+        self:setState({
             Hide = false,
-            Mount = self.props.Mount,
-            ActionText = self.props.ActionText
+            Mount = self.props.Mount
         })
     elseif not self.state.Hide and lastState.Hide then
         self.RunServiceConnection = RunService.RenderStepped:Connect(function()
@@ -121,7 +120,7 @@ function ProximityPrompt:didUpdate(lastProps, lastState)
     elseif not self.state.Hide and not self.props.isShowing then
         self.RunServiceConnection:Disconnect()
         self.RunServiceConnection = nil
-        return self:setState({
+        self:setState({
             Hide = true,
             Mount = nil
         })

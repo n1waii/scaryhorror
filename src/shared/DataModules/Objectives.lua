@@ -17,15 +17,15 @@ return {
         Id = "3"
     },
 
-    ["4"] = {
-        Completed = false,
-        Text = "lorem ipsum",
-        Id = "4"
-    },
-
     ["5"] = {
         Completed = false,
-        Text = "test",
+        Text = "Go to bed",
         Id = "5"
+    },
+
+    ["6"] = {
+        Completed = false,
+        Text = "test",
+        Id = "6"
     }
 }

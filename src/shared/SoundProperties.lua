@@ -1,6 +1,7 @@
 --[[
     Credits:
     Some sound from Zapsplat.com
+    Some sound from Soundjay.com
 --]]
 
 return {
@@ -70,6 +71,72 @@ return {
         RollOffMinDistance = math.huge,
         Volume = 0.5,
         SoundId = "rbxassetid://7175790995"
+    },
+    Screeching = {
+        Name = "Screeching",
+        RollOffMaxDistance = math.huge,
+        RollOffMinDistance = math.huge,
+        Volume = 0.5,
+        SoundId = "rbxassetid://7198780431"
+    },
+    LongViolinScare3 = {
+        Name = "LongViolinScare3",
+        RollOffMaxDistance = math.huge,
+        RollOffMinDistance = math.huge,
+        Volume = 0.5,
+        SoundId = "rbxassetid://7175791440"
+    },
+    AlarmClockBeeping = {
+        Name = "AlarmClockBeeping",
+        RollOffMaxDistance = 100,
+        RollOffMinDistance = 10,
+        Looped = true,
+        Volume = 0.5,
+        SoundId = "rbxassetid://729501951"
+    },
+    BabyLullaby = {
+        Name = "BabyLullaby",
+        RollOffMaxDistance = 100,
+        RollOffMinDistance = 5,
+        Volume = 0.1,
+        Looped = true,
+        SoundId = "rbxassetid://1845960932"
+    },
+    BabySoundEffect = {
+        Name = "BabySoundEffect",
+        RollOffMaxDistance = 100,
+        RollOffMinDistance = 5,
+        Looped = true,
+        Volume = 0.4,
+        SoundId = "rbxassetid://7208283653"
+    },
+    SuddenBeat = {
+        Name = "SuddenBeat",
+        RollOffMinDistance = math.huge,
+        RollOffMaxDistance = math.huge,
+        Volume = 1,
+        SoundId = "rbxassetid://6872032719"
+    },
+    PanicScare = {
+        Name = "PanicScare",
+        RollOffMinDistance = math.huge,
+        RollOffMaxDistance = math.huge,
+        Volume = 0.2,
+        SoundId = "rbxassetid://6872032458"
+    },
+    GhostSwoosh = {
+        Name = "GhostSwoosh",
+        RollOffMinDistance = math.huge,
+        RollOffMaxDistance = math.huge,
+        Volume = 0.3,
+        SoundId = "rbxassetid://7273955072"
+    },
+    FemaleGhostShortLaugh = {
+        Name = "FemaleGhostShortLaugh",
+        RollOffMaxDistance = 30,
+        RollOffMinDistance = 5,
+        Volume = 1.2,
+        SoundId = "rbxassetid://7279767772"
     },
     Intro = {
         RadioTalking = {
@@ -168,6 +235,20 @@ return {
             Volume = 0.5,
             Looped = false,
             SoundId = "rbxassetid://1412830636"
+        }
+    },
+    Cabinets = {
+        CabinetOpen = {
+            Name = "CabinetOpen",
+            Volume = 0.5,
+            Looped = false,
+            SoundId = "rbxassetid://7192823959"
+        },
+        CabinetClose = {
+            Name = "CabinetClose",
+            Volume = 0.5,
+            Looped = false,
+            SoundId = "rbxassetid://7192824084"
         }
     }
 }

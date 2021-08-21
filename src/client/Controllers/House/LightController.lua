@@ -1,5 +1,6 @@
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local Players = game:GetService("Players")
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local TweenService = game:GetService("TweenService")
 
 local switch = require(ReplicatedStorage.Util.SwitchStatement)
 
@@ -15,7 +16,8 @@ local Knit = require(ReplicatedStorage.Knit)
 local LightController = Knit.CreateController {
     Name = "LightController",
     Lights = {},
-    LightNumbers = {}
+    LightNumbers = {},
+    DefaultLightColors = {}
 }
 
 function LightController:TurnOn(lights)
@@ -34,6 +36,33 @@ function LightController:TurnOff(lights)
     end
 end
 
+function LightController:ChangeColor(lights, color, tweenInfo)
+    lights = lights or self.LightNumbers
+    for i,lightNumber in pairs(lights) do
+        local surfaceLight = self.Lights[lightNumber]
+        self.DefaultLightColors[lightNumber] = surfaceLight.Color
+        if tweenInfo then
+            local t = TweenService:Create(surfaceLight, tweenInfo, {
+                Color = color
+            })
+            t:Play()
+            if i == #lights then
+                return i
+            end
+        else
+            surfaceLight.Color = color
+        end
+    end
+end
+
+function LightController:ResetColor(lights)
+    lights = lights or self.LightNumbers
+    for _,lightNumber in pairs(lights) do
+        local surfaceLight = self.Lights[lightNumber]
+        surfaceLight.Color = self.DefaultLightColors[lightNumber] or Color3.fromRGB(255, 231, 181)
+    end
+end
+
 function LightController:Flicker(speed, amount, lights)
     lights = lights or self.LightNumbers
     local lightEnabledState = {}
@@ -47,9 +76,9 @@ function LightController:Flicker(speed, amount, lights)
     flickeringSound:Play()
     for i = 1, amount do
         self:TurnOff(lights)
-        wait(speed)
+        task.wait(speed)
         self:TurnOn(lights)
-        wait(speed)
+        task.wait(speed)
     end
     flickeringSound:Destroy()
 
@@ -60,7 +89,7 @@ function LightController:Flicker(speed, amount, lights)
 end
 
 function LightController:KnitStart()
-    wait(5)
+    task.wait(10)
     for _,v in pairs(LightsFolder:GetChildren()) do
         local surfaceLight = v:FindFirstChildWhichIsA("SurfaceLight", true)
         if surfaceLight then

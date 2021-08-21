@@ -21,6 +21,11 @@ function TriggerController:Trigger(player, event)
     eventTriggers.Client(player)
 end
 
+function TriggerController:TriggerOnServer(event)
+    local TriggerService = Knit.GetService("TriggerService")
+    TriggerService.TriggerOnServer:Fire(event)
+end
+
 function TriggerController:KnitStart()
     local TriggerService = Knit.GetService("TriggerService")
 

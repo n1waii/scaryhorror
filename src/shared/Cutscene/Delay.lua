@@ -13,7 +13,7 @@ function Delay:Start()
 	if self.Callback then
 		coroutine.wrap(self.Callback)()
 	end
-	wait(self.Time)
+	task.wait(self.Time)
 end
 
 return Delay

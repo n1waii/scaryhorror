@@ -3,14 +3,15 @@ local ContextActionService = game:GetService("ContextActionService")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local UserInputService = game:GetService("UserInputService")
 
+local DISABLE_CONTROLS_ACTION = "DisableControlsAction"
+
 local Knit = require(ReplicatedStorage.Knit)
 local InputController = Knit.CreateController {
     Name = "InputController",
     KeysDown = {},
     KeyDownListeners = {},
     KeyUpListeners = {},
-    MappedKeys = {},
-    ControllerCache = {}
+    MappedKeys = {}
 }
 
 function InputController:Map(keyCode, callback)
@@ -78,17 +79,18 @@ function InputController:EmitKeyDown(keyCode, ...)
 end
 
 function InputController:DisablePlayerControls()
-    for _,controller in pairs(ControllerService:GetChildren()) do
-        controller.Parent = nil
-        table.insert(self.ControllerCache, controller)
-    end
+    ContextActionService:BindAction(
+        DISABLE_CONTROLS_ACTION,
+        function()
+            return Enum.ContextActionResult.Sink
+        end,
+        false,
+        unpack(Enum.PlayerActions:GetEnumItems())
+    )
 end
 
 function InputController:EnablePlayerControls()
-    for _,controller in pairs(self.ControllerCache) do
-        controller.Parent = nil
-    end
-    self.ControllerCache = {}
+    ContextActionService:UnbindAction(DISABLE_CONTROLS_ACTION)
 end
 
 function InputController:GetContextActionService()
