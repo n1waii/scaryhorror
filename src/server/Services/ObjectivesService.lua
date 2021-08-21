@@ -11,7 +11,8 @@ local ObjectivesService = Knit.CreateService {
         CompleteObjective = RemoteSignal.new(),
         RemoveObjective = RemoteSignal.new(),
     },
-    PlayerObjectives = {}
+    PlayerObjectives = {},
+    CompletedObjectives = {}
 }
 
 local function AddPlayerObjective(id)
@@ -40,6 +41,11 @@ end
 
 function ObjectivesService:CompleteObjective(id)
     self.Client.CompleteObjective:FireAll(id)
+    self.CompletedObjectives[id] = true
+end
+
+function ObjectivesService:IsComplete(id)
+    return self.CompletedObjectives[id]
 end
 
 function ObjectivesService:HasObjective(player, id)

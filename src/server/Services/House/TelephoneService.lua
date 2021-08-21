@@ -40,7 +40,7 @@ end
 
 function TelephoneService:PromptCallback(player, proximityPart)
     if not proximityPart:GetAttribute("Triggerable") then return end
-    proximityPart:SetAttribute("Triggerable", false)
+    proximityPart:SetAttribute("Enabled", false)
     
     switch (proximityPart:GetAttribute("ActionText")) {
         [PromptActions.AnswerPhone] = function()

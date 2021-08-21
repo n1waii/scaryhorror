@@ -3,7 +3,7 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local RunService = game:GetService("RunService")
 
 local TRIGGER_KEYCODE = Enum.KeyCode.E
-local PROMPT_RANGE = 10
+local PROMPT_RANGE = 7
 
 local Knit = require(ReplicatedStorage.Knit)
 
@@ -36,7 +36,7 @@ function ProximityPromptController:SetupPromptHovering()
                 if model and model:FindFirstChild("AlphexusPrompt") then
                     local prompt = model.AlphexusPrompt
                     local dist = (Player.Character.HumanoidRootPart.Position-prompt.Position).Magnitude
-                    if prompt:GetAttribute("Triggerable") and self.ActivePrompts[prompt] then
+                    if (prompt:GetAttribute("Enabled")) then
                         if dist <= PROMPT_RANGE then
                             if self.CurrentPrompt ~= prompt then
                                 self.CurrentPrompt = prompt

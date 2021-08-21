@@ -24,7 +24,7 @@ function Cursor:render()
         BackgroundTransparency = self.props.Active and 0 or 1,
         BorderSizePixel = 0,
         Position = UDim2.fromScale(0.5, 0.5),
-        Size = UDim2.fromScale(0.007, 0.02)
+        Size = UDim2.fromScale(0.005, 0.02)
     }, {
         UIAspectRatioConstraint = e("UIAspectRatioConstraint", {
             AspectRatio = 1,

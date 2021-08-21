@@ -1,5 +1,6 @@
 return {
 	Story = { -- text that goes along with cutscenes and the story go here
+		-- intro scene --
 		["302916"] = { -- James
 			Text = "James: Why are you always in denial? You know that our son is failing school.",
 			Audio = "rbxassetid://12345678"
@@ -72,6 +73,7 @@ return {
 			Audio = "rbxassetid://12345678"
 		},
 
+		-- early phone scene --
 		["73921"] = { 
 			Text = {
 				"Telephone (man): Hey, I hope you're doing okay. I just heard the news and I'm so sorry for your loss.",
@@ -105,6 +107,36 @@ return {
 				"James: Thanks, bye."
 			}
 		},
+
+		-- going to bed scene --
+		["380127"] = {
+			Text = "James: *yawns* I'm feeling a little tired..."
+		},
+
+		["372138"] = {
+			Text = "James: Huh. Who's there?"
+		},
+
+		-- waking up from bed scene -- 
+		["389213"] = {
+			Text = { 
+				"James: *yawns* I don't think I set the alarm for this early.",
+				"James: What a nightmare that was though."
+			}
+		},
+
+		-- baby room -- 
+		["381238"] = {
+			Text = "James: Where's the baby?"
+		},
+
+		["312793"] = {
+			Text = "James: Who closed the door?"
+		},
+
+		["3812790"] = {
+			Text = "James: Where did these toys come from?"
+		}
 	},
 
 	Misc = { -- text that plays when player does something goes here. for example, going into some dark room.
@@ -126,7 +158,7 @@ return {
 			RandomChoice = true
 		},
 		["38213"] = {
-			Text = "(2 years later...)                    "
+			Text = "(2 years later...)"
 		}
 	}
 }

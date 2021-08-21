@@ -14,7 +14,8 @@ local Camera = workspace.CurrentCamera
 
 local CameraController = Knit.CreateController {
     Name = "CameraController",
-    Connections = {}
+    Connections = {},
+    Camera = Camera
 }
 
 function CameraController:CameraRotationEffect(scale)
@@ -24,15 +25,13 @@ function CameraController:CameraRotationEffect(scale)
     table.insert(self.Connections, RunService.RenderStepped:Connect(function()
         local Center = Vector2.new(Camera.ViewportSize.X/2, Camera.ViewportSize.Y/2)
         local MoveVector = Vector3.new((Mouse.X-Center.X)/scale, (Mouse.Y-Center.Y)/scale, 0)
-        Camera.CFrame = DefaultCFrame * CFrame.new(DefaultCFrame.p + MoveVector)
+        Camera.CFrame = DefaultCFrame * CFrame.new(DefaultCFrame.Position + MoveVector)
     end))
 end
 
 function CameraController:Scriptable(cf)
     Camera.CameraType = Enum.CameraType.Scriptable
-    if cf then
-        Camera.CFrame = cf
-    end
+    Camera.CFrame = cf or Camera.CFrame
 end
 
 function CameraController:Track(part)
@@ -54,9 +53,6 @@ function CameraController:TweenCamera(cf, t)
     local tween = TweenService:Create(Camera, TweenInfo.new(t), {
         CFrame = cf
     })
-    tween.Completed:Connect(function()
-        tween:Destroy()
-    end)
     tween:Play()
 
     return tween
@@ -66,9 +62,6 @@ function CameraController:TweenBlur(size, t)
     local tween = TweenService:Create(self.Blur, TweenInfo.new(t), {
         Size = size
     })
-    tween.Completed:Connect(function()
-        tween:Destroy()
-    end)
     tween:Play()
 
     return tween
@@ -76,7 +69,7 @@ end
 
 function CameraController:KnitStart()
    self.Blur = Instance.new("BlurEffect")
-   self.Blur.Size = 0 
+   self.Blur.Size = 0
    self.Blur.Parent = Lighting
 end
 

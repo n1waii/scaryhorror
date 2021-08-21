@@ -1,3 +1,4 @@
+local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
 local WALKING_SPEED = 8
@@ -103,6 +104,15 @@ function CharacterService:StartSprinting(player)
         end
 
         wait(STAMINA_REDUCTION_DELAY)
+    end
+end
+
+function CharacterService:SetAllCharacterCFrame(cframe)
+    for _,player in pairs(Players:GetPlayers()) do
+        local character = player.Character
+        if character then
+            character:SetPrimaryPartCFrame(cframe * CFrame.new(0, character.Humanoid.HipHeight, 0))
+        end
     end
 end
 

@@ -10,7 +10,8 @@ local Camera = workspace.CurrentCamera
 
 local CharacterController = Knit.CreateController {
     Name = "CharacterController",
-    CanSprint = true
+    CanSprint = true,
+    Connections = {}
 }
 
 local R15_ARMS = {
@@ -37,9 +38,13 @@ function CharacterController:SetCanSprint(bool)
 end
 
 function CharacterController:SetCharacterCFrame(cf)
-    Character = Player.Character
     if Character then
-        Character:SetPrimaryPartCFrame(cf * CFrame.new(0, Character.Humanoid.HipHeight, 0))
+        local CameraController = Knit.Controllers.CameraController
+        local camPosition = Camera.CFrame.Position
+        CameraController:Scriptable()
+        Character:PivotTo(cf * CFrame.new(0, Character.Humanoid.HipHeight, 0))
+        Camera.CFrame = CFrame.new(camPosition.X, camPosition.Y, camPosition.Z) * (cf-cf.Position)
+        CameraController:Reset()
     end
 end
 
@@ -61,6 +66,75 @@ end
 function CharacterController:EnableMovement()
     self:SetCanSprint(true)
     Character.Humanoid.WalkSpeed = 8
+end
+
+function CharacterController:IsCharacterFacing(model)
+    if not Player.Character then return end
+    local a = Player.Character.HumanoidRootPart.CFrame.LookVector
+    local b = model.PrimaryPart.CFrame.LookVector
+    local scalar = a:Dot(b)
+    local theta = math.deg(math.acos(scalar))
+    if theta >= 140 then
+        return true
+    end
+
+    return false
+end
+
+
+function CharacterController:WhenCharacterNears(model, distance, callback)
+
+end
+
+
+function CharacterController:WhenPredicatesAreTrue(predicates, callback)
+    local function evaluate()
+        for _, f in ipairs(predicates) do
+            if not f() then
+                return false
+            end
+        end
+
+        return true
+    end
+
+    local connection; connection = RunService.Heartbeat:Connect(function()
+        if evaluate() then
+            connection:Disconnect()
+            callback()
+        end
+    end)
+
+    return connection
+end
+
+-- CharacterController:WhenPredicatesAreTrue({
+--     function() return CharacterController:IsCharacterNear(model, 10) end,
+--     function() return CharacterController:IsCharacterFacing(model) end
+-- }, function()
+--     print("Character is facing and within 10 studs of model")
+-- end)
+
+function CharacterController:WhenCharacterFaces(model, callback)
+    local connection; connection = RunService.Heartbeat:Connect(function()
+        if CharacterController:IsCharacterFacing(model) then
+            connection:Disconnect()
+            callback()
+        end
+    end)
+
+    return connection
+end
+
+function CharacterController:CacheConnection(name, connectionObject)
+    self.Connections[name] = connectionObject
+end
+
+function CharacterController:DisconnectConnection(name)
+    if self.Connections[name] then
+        self.Connections[name]:Disconnect()
+        self.Connections[name] = nil
+    end
 end
 
 function CharacterController:KnitStart()

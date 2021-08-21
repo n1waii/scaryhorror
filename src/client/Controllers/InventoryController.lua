@@ -10,7 +10,6 @@ local InventoryController = Knit.CreateController {
 }
 
 function InventoryController:SetEquippedItem(itemName)
-    print(itemName)
     Knit.Controllers.StateController.Store:dispatch({
         type = "EquipInventoryItem",
         ItemName = itemName

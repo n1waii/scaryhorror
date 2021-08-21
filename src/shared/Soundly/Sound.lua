@@ -27,8 +27,10 @@ function Sound.new(mount, props)
 
     if props then
         for prop, value in pairs(props) do
-            if typeof(value) == "table" and value.__type == "Binding" then
-                props[prop] = value:_startBinding(self, prop)
+            if typeof(value) == "table" then
+                if value.__type == "Binding" then
+                    props[prop] = value:_startBinding(self, prop)
+                end
             else
                 soundInstance[prop] = value
             end
@@ -48,11 +50,14 @@ function Sound:GetTimePositionReachedSignal(t, callback)
 end
 
 function Sound:FadeOut()
-    local sound = self:GetSoundInstance()
-    for i = sound.Volume, 0, 0.01 do
-        sound.Volume = i
-        wait(0.01)
-    end
+    return Promise.new(function(res, rej)
+        local sound = self:GetSoundInstance()
+        for i = sound.Volume, 0, -0.01 do
+            sound.Volume = i
+            task.wait(0.01)
+        end
+        res()
+    end)
 end
 
 function Sound:FadeIn(volume)

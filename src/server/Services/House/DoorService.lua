@@ -24,6 +24,15 @@ function DoorService:IsLocked(doorModel)
     return doorModel:GetAttribute("Locked")
 end
 
+function DoorService:IsOpen(doorModel)
+    return self.OpenDoors[doorModel]
+end
+
+function DoorService:LockDoor(doorModel, keyId)
+    doorModel:SetAttribute("Locked", true)
+    doorModel:SetAttribute("KeyId", keyId)
+end
+
 function DoorService:HasKey(doorModel, player)
     local character = player.Character
     if not character then return end
@@ -44,7 +53,7 @@ end
 
 function DoorService:OpenDoor(doorModel, charModel)
     self.OpenDoors[doorModel] = {
-        ClosedCFrame = doorModel.PrimaryPart.CFrame
+        CloseCFrame = doorModel.PrimaryPart.CFrame
     }
 
     local openAngle = CFrame.Angles(0, math.rad(100), 0)
@@ -52,7 +61,7 @@ function DoorService:OpenDoor(doorModel, charModel)
         local scalar = charModel.HumanoidRootPart.CFrame.LookVector:Dot(doorModel.PrimaryPart.CFrame.LookVector)
         local angle;
 
-        if scalar >= 0 and scalar <= 1 then
+        if scalar >= 0 then
             openAngle = CFrame.Angles(0, math.rad(100), 0)
         else
             openAngle = CFrame.Angles(0, math.rad(-100), 0)
@@ -61,20 +70,20 @@ function DoorService:OpenDoor(doorModel, charModel)
 
     Soundly.CreateSound(doorModel.PrimaryPart, SoundProperties.Doors.DoorOpen):PlayOnce()
     self.Client.OpenDoor:FireAll(doorModel, openAngle)
-    doorModel.AlphexusPrompt:SetAttribute("ActionText", "close door")
+    doorModel.AlphexusPrompt:SetAttribute("ActionText", "Close door")
 end
 
 function DoorService:CloseDoor(doorModel)
     Soundly.CreateSound(doorModel.PrimaryPart, SoundProperties.Doors.DoorClose):PlayOnce()
-    self.Client.CloseDoor:FireAll(doorModel, self.OpenDoors[doorModel].ClosedCFrame)
+    self.Client.CloseDoor:FireAll(doorModel, self.OpenDoors[doorModel].CloseCFrame)
     self.OpenDoors[doorModel] = nil
-    doorModel.AlphexusPrompt:SetAttribute("ActionText", "open door")
+    doorModel.AlphexusPrompt:SetAttribute("ActionText", "Open door")
 end
 
 function DoorService:PromptCallback(player, proximityPart)
     if not player.Character then return end
     if not proximityPart:GetAttribute("Triggerable") then return end
-    proximityPart:SetAttribute("Triggerable", false) 
+    proximityPart:SetAttribute("Triggerable", false)
     local doorModel = proximityPart.Parent
     
     if self.OpenDoors[doorModel] then
