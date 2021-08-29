@@ -1,7 +1,8 @@
 --[[
     Credits:
-    Some sound from Zapsplat.com
-    Some sound from Soundjay.com
+        Some sounds from Zapsplat.com
+        Some sounds from Soundjay.com
+        Some sounds from Soundbible.com
 --]]
 
 return {
@@ -117,6 +118,13 @@ return {
         Volume = 1,
         SoundId = "rbxassetid://6872032719"
     },
+    BreatheGhostEerie = {
+        Name = "BreatheGhostEerie",
+        RollOffMinDistance = math.huge,
+        RollOffMaxDistance = math.huge,
+        Volume = 0.5,
+        SoundId = "rbxassetid://7175792648"
+    },
     PanicScare = {
         Name = "PanicScare",
         RollOffMinDistance = math.huge,
@@ -131,12 +139,26 @@ return {
         Volume = 0.3,
         SoundId = "rbxassetid://7273955072"
     },
+    RotatingObjectSwoosh = {
+        Name = "RotatingObjectSwoosh",
+        RollOffMaxDistance = 15,
+        RollOffMinDistance = 2,
+        Volume = 0.5,
+        SoundId = "rbxassetid://7299420963"
+    },
     FemaleGhostShortLaugh = {
         Name = "FemaleGhostShortLaugh",
         RollOffMaxDistance = 30,
         RollOffMinDistance = 5,
         Volume = 1.2,
         SoundId = "rbxassetid://7279767772"
+    },
+    JackInTheBox = {
+        Name = "JackInTheBox",
+        RollOffMaxDistance = 15,
+        RollOffMinDistance = 3,
+        Volume = 0.5,
+        SoundId = "rbxassetid://176993673"
     },
     Intro = {
         RadioTalking = {

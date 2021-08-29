@@ -22,7 +22,7 @@ function PlayerConnectionService:PlayerAdded(player)
     end)
 
     player:LoadCharacter()
-    wait(6)
+    wait(4)
     Knit.Services.TriggerService:Trigger(player, "Testing")
 end
 

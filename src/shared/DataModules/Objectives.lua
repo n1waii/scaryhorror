@@ -25,7 +25,13 @@ return {
 
     ["6"] = {
         Completed = false,
-        Text = "test",
+        Text = "Find a way to escape the room",
         Id = "6"
-    }
+    },
+
+    ["7"] = {
+        Completed = false,
+        Text = "Solve the puzzle",
+        Id = "7"
+    },
 }

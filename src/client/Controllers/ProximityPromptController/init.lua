@@ -86,8 +86,8 @@ function ProximityPromptController:SetupPromptTriggering()
     local InputController = Knit.Controllers.InputController
     
     InputController:WhenKeyDown(TRIGGER_KEYCODE, function()
-        if not self.CanTrigger or not self.CurrentPrompt then return print("no") end
-        if not self.CurrentPrompt:GetAttribute("Triggerable") then return print'cant trigger' end
+        if not self.CanTrigger or not self.CurrentPrompt then return end
+        if not self.CurrentPrompt:GetAttribute("Triggerable") then return end
         local promptController = Knit.Controllers[self.CurrentPrompt:GetAttribute("Controller")]
         if promptController then
             self.CanTrigger = false

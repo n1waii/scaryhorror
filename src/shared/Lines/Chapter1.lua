@@ -136,6 +136,10 @@ return {
 
 		["3812790"] = {
 			Text = "James: Where did these toys come from?"
+		},
+
+		["3812308"] = {
+			Text = "James: Looks like some kind of puzzle."
 		}
 	},
 

@@ -15,11 +15,9 @@ function ItemPickupService:PromptCallback(player, proximityPart)
     if not player.Character then return end
     if not proximityPart:GetAttribute("Triggerable") then return end
     
-    Knit.Services.QueryService:HandleRequest("ItemRequest", proximityPart.ItemRequest, player)
+    Knit.Services.QueryService:HandleRequest("ItemRequest", proximityPart:GetAttribute("ItemRequest"), player)
     
-    proximityPart:Destroy()
-    wait(0.9)
-    proximityPart:SetAttribute("Triggerable", true)
+    proximityPart.Parent:Destroy()
 end
 
 function ItemPickupService:KnitInit()
