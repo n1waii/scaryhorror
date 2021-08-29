@@ -166,8 +166,8 @@ return {
 
     Testing = {
         Server = function(player)
-            player.Character:MoveTo(workspace.testPos.Position)
-            TriggerService:Trigger(player, "SpawnScene")
+            --player.Character:MoveTo(workspace.testPos2.Position)
+            TriggerService:Trigger(player, "BabyCribTryingToExit", TriggerParts.BabyCribExit)
         end
     },
 
@@ -269,6 +269,7 @@ return {
             if TriggerService:IsTriggered(event) then return end
             TriggerService:AddTriggered(event)
             TriggerService.Client.TriggerClientCallback:FireAll(player, event)
+            TriggerParts.BabyCrib:SetAttribute("Triggerable", true)
         end,
 
         Client = function(player)
@@ -368,14 +369,12 @@ return {
 
         Client = function(player)
             local scareModel = GameObjects.ScareModel2
-            local panicScareSound = Soundly.CreateSound(workspace.GameSounds, SoundProperties.PanicScare)
+            local breatheGhostEerieSound = Soundly.CreateSound(workspace.GameSounds, SoundProperties.BreatheGhostEerie)
             local swooshSound = Soundly.CreateSound(workspace.GameSounds, SoundProperties.GhostSwoosh)
-            local ghostLaugh = Soundly.CreateSound(scareModel.PrimaryPart, SoundProperties.FemaleGhostShortLaugh)
-            Instance.new("ReverbSoundEffect", ghostLaugh:GetSoundInstance())
 
-            CharacterController:DisconnectConnection("ScaryModelFacingCheck")
+            CharacterController:DisconnectConnection("ScaryModelFacingCheck"  )
 
-            panicScareSound:Play()
+            breatheGhostEerieSound:Play()
             if not CharacterController:IsCharacterFacing(scareModel) then
                 InputController:DisablePlayerControls()
                 CameraController:Scriptable()
@@ -387,10 +386,10 @@ return {
                 end)
             end
 
-            local tiltModelTween = TweenService:Create(scareModel.PrimaryPart, TweenInfo.new(2), {
+            local tiltModelTween = TweenService:Create(scareModel.PrimaryPart, TweenInfo.new(2, Enum.EasingStyle.Linear), {
                 CFrame = scareModel.PrimaryPart.CFrame * CFrame.Angles(math.rad(-45), 0, 0)
             })
-            local forwardTween = TweenService:Create(scareModel.PrimaryPart, TweenInfo.new(2), {
+            local forwardTween = TweenService:Create(scareModel.PrimaryPart, TweenInfo.new(2, Enum.EasingStyle.Quint, Enum.EasingDirection.Out), {
                 CFrame = (scareModel.PrimaryPart.CFrame * CFrame.Angles(math.rad(-45), 0, 0)) + Vector3.new(15, 0, 0)
             })
 
@@ -398,7 +397,6 @@ return {
             tiltModelTween.Completed:Wait()
             forwardTween:Play()
             swooshSound:PlayOnce()
-            ghostLaugh:PlayOnce()
             forwardTween.Completed:Wait()
             scareModel:Destroy()
             TriggerController:TriggerOnServer("BabyCribStartPuzzle")
@@ -412,8 +410,10 @@ return {
             TriggerService.Client.TriggerClientCallback:FireAll(player, event)
             task.wait(2)
             RuntimeInstances.CribRoom.Parent = GameObjects
-            local puzzle = BlockPuzzle.new(GameObjects.CribRoom.Blocks:GetChildren(), "HELP")
+            BlockPuzzle:Start()
+            task.wait(1)
             DialogueService:PlayLineAll("3812790")
+            ObjectivesService:AddObjective("6")
         end,
 
         Client = function(player)
